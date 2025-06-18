@@ -10,10 +10,14 @@ const Checkout = () => {
 
   const iniciarCompra = async () => {
     try {
+      const ordenId = 'ORD-' + Date.now();
+
+      // Cambiado de 'carrito' a 'items' para el backend
       const res = await axios.post('http://localhost:5000/api/webpay/crear-transaccion', {
-        ordenId: 'ORD-' + Date.now(),
-        total: total,
+        ordenId,
+        total,
         correo: 'cliente@correo.com',
+        items: carrito // 👈 importante: el backend espera 'items'
       });
 
       window.location.href = `${res.data.url}?token_ws=${res.data.token}`;

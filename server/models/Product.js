@@ -8,4 +8,4 @@ const productoSchema = new mongoose.Schema({
   stock: Number
 }, { collection: 'products' }); // 👈 clave aquí
 
-module.exports = mongoose.model('Products', productoSchema);
+module.exports = mongoose.model('Producto', productoSchema);

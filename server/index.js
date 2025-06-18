@@ -19,7 +19,7 @@ app.get('/api/test', (req, res) => {
   res.send('Servidor funcionando correctamente');
 });
 
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/test')
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/Tienda')
   .then(() => {
     app.listen(5000, () => {
       console.log('✅ Servidor corriendo en http://localhost:5000');
