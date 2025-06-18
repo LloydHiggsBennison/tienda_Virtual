@@ -1,6 +1,10 @@
-const { WebpayPlus } = require('transbank-sdk');
+const { WebpayPlus, Environment } = require('transbank-sdk');
 
-// No usar "new" aquí, simplemente exportamos el objeto
-const transaction = WebpayPlus.Transaction;
+const transaction = new WebpayPlus.Transaction({
+  commerceCode: '597055555532', // Código comercio válido
+  apiKey: 'test', // ✅ CORRECTO: API Key de pruebas
+  environment: Environment.Integration
+});
 
+console.log("🧩 Configuración Webpay corregida (apiKey: 'test')");
 module.exports = { transaction };
