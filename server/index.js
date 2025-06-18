@@ -6,25 +6,20 @@ const cors = require('cors');
 
 const app = express();
 
-// Middlewares
 app.use(cors());
-app.use(express.urlencoded({ extended: true })); // NECESARIO para recibir token_ws
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// Rutas
 const productRoutes = require('./routes/products');
-const webpayRoutes = require('./routes/webpay');
-
 app.use('/api/products', productRoutes);
+
+const webpayRoutes = require('./routes/webpay');
 app.use('/api/webpay', webpayRoutes);
 
-// Ruta de prueba
 app.get('/api/test', (req, res) => {
   res.send('Servidor funcionando correctamente');
 });
 
-// Conexión a MongoDB
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/test')
   .then(() => {
     app.listen(5000, () => {
       console.log('✅ Servidor corriendo en http://localhost:5000');
