@@ -13,7 +13,7 @@ import LoginForm from './components/LoginForm';
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
-const CLIENT_ID = '403622561597-i0cnjhbooputm6vbhdkt0f2ned26ad3g.apps.googleusercontent.com';
+const CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID'; // Reemplaza con tu Client ID de Google OAuth
 
 // Componente principal que maneja las rutas y el estado de la aplicación
 // Este componente utiliza React Router para definir las rutas de la aplicación
