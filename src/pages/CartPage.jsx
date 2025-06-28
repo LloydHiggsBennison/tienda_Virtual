@@ -1,6 +1,9 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
 
+// Componente para la página del carrito de compras
+// Este componente muestra la lista de productos en el carrito, el total y botones para eliminar productos
+// También permite vaciar el carrito completo
 const CartPage = () => {
   const { carrito, removeFromCart, clearCart } = useCart();
 

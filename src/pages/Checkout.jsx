@@ -3,6 +3,13 @@ import { useCart } from '../context/CartContext';
 import axios from 'axios';
 import webpay from '../assets/img/webpay-plus.jpg';
 
+
+
+// Componente para la página de Checkout
+// Este componente muestra el resumen de la compra, los productos en el carrito y permite iniciar el pago
+// Utiliza el contexto del carrito para obtener los productos y sus detalles
+// También maneja la lógica para iniciar la transacción con Webpay
+
 const Checkout = () => {
   const { carrito, removeFromCart, clearCart } = useCart();
 

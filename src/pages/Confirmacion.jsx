@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+
+
+// Componente para la página de Confirmación de Pago
+// Este componente muestra el estado del pago, la orden y los productos comprados
+// Utiliza los parámetros de la URL para mostrar el estado del pago y los detalles de la compra
+// También limpia los detalles de la compra del localStorage después de mostrarlos
+// Permite al usuario volver al inicio después de ver la confirmación
+
 const Confirmacion = () => {
   const location = useLocation();
   const navigate = useNavigate();

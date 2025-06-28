@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 
 
+// Componente Navbar para la Tienda Virtual
+// Este componente muestra enlaces a la página de inicio y al carrito, junto con el número de artículos en el carrito
+
 const Navbar = () => {
   const { cart } = useCart();
 

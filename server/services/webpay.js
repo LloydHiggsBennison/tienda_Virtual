@@ -1,9 +1,9 @@
 const { WebpayPlus, IntegrationApiKeys, IntegrationCommerceCodes, Options } = require('transbank-sdk');
 
 const options = new Options(
-  IntegrationCommerceCodes.WEBPAY_PLUS, // '597055555532'
-  IntegrationApiKeys.WEBPAY,            // '579B532A74408B0C9D079ED094D31EA1615BACD3'
-  'https://webpay3gint.transbank.cl'    // URL endpoint integración
+  IntegrationCommerceCodes.WEBPAY_PLUS, 
+  IntegrationApiKeys.WEBPAY,            
+  'https://webpay3gint.transbank.cl'    
 );
 
 const transaction = new WebpayPlus.Transaction(options);

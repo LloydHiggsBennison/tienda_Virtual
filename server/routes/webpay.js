@@ -2,12 +2,15 @@ const express = require('express');
 const router = express.Router();
 const { transaction } = require('../services/webpay');
 const Product = require('../models/Product');
+const Transaccion = require('../models/Transaccion'); // 👈 Registro para las ventas
 const mongoose = require('mongoose');
-const fs = require('fs'); // 👈 Para log de respaldo
+const fs = require('fs');
 
 const LOG_PATH = './logs/webpay.log';
 
+// ---------------------------
 // Crear transacción
+// ---------------------------
 router.post('/crear-transaccion', async (req, res) => {
   const { ordenId, total, correo, items } = req.body;
 
@@ -19,7 +22,7 @@ router.post('/crear-transaccion', async (req, res) => {
       'http://localhost:5000/api/webpay/confirmar'
     );
 
-    req.app.locals[ordenId] = items;
+    req.app.locals[ordenId] = { items, total };
 
     res.json({
       url: response.url,
@@ -35,7 +38,9 @@ router.post('/crear-transaccion', async (req, res) => {
   }
 });
 
+// ---------------------------
 // Confirmar transacción
+// ---------------------------
 router.all('/confirmar', async (req, res) => {
   const token = (req.body && req.body.token_ws) || (req.query && req.query.token_ws);
   if (!token) return res.status(400).send('Token no proporcionado');
@@ -49,10 +54,13 @@ router.all('/confirmar', async (req, res) => {
     fs.appendFileSync(LOG_PATH, `\n[${new Date().toISOString()}] Transacción confirmada:\n${JSON.stringify(response, null, 2)}\n`);
 
     if (status === 'AUTHORIZED') {
-      const items = req.app.locals[buy_order] || [];
+      const data = req.app.locals[buy_order] || {};
+      const items = data.items || [];
+      const total = data.total || 0;
 
       fs.appendFileSync(LOG_PATH, `\n🛒 Productos para reducir stock (orden ${buy_order}):\n${JSON.stringify(items, null, 2)}\n`);
 
+      // 🔹 1. Reducir stock
       for (const item of items) {
         try {
           const result = await Product.findByIdAndUpdate(
@@ -74,6 +82,22 @@ router.all('/confirmar', async (req, res) => {
         }
       }
 
+      // 🔹 2. Registrar venta
+      const venta = new Transaccion({
+        ordenId: buy_order,
+        items: items.map(it => ({
+          id: it._id,
+          nombre: it.nombre,
+          cantidad: it.cantidad,
+          precio: it.precio
+        })),
+        total: total
+      });
+
+      await venta.save();
+      fs.appendFileSync(LOG_PATH, `✅ Venta registrada: ${JSON.stringify(venta, null, 2)}\n`);
+
+      // 🔹 3. Limpiar memoria
       delete req.app.locals[buy_order];
     }
 

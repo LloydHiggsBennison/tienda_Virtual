@@ -1,6 +1,11 @@
 import { createContext, useContext, useState } from 'react';
 
+// Contexto para el carrito de compras
+// Este contexto permite manejar el estado del carrito en toda la aplicación
+// Proporciona funciones para agregar, eliminar y limpiar productos del carrito
+
 const CartContext = createContext();
+
 
 export const CartProvider = ({ children }) => {
   const [carrito, setCarrito] = useState([]);

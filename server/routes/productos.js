@@ -3,19 +3,17 @@ const router = express.Router();
 const Producto = require('../models/Product');
 const Contador = require('../models/Contador');
 
-// ---------------------------
-// ✅ GET todos los productos
-// ---------------------------
+// GET: todos los productos
 router.get('/', async (req, res) => {
   const productos = await Producto.find();
   res.json(productos);
 });
 
-// ---------------------------
-// ✅ POST: agregar producto con ID incremental
-// ---------------------------
+// POST: agregar producto con ID incremental
 router.post('/', async (req, res) => {
-  // Busca o crea contador
+  let idNuevo;
+
+  // Busca el contador
   let contador = await Contador.findOne({ nombre: 'productos' });
   if (!contador) {
     contador = await Contador.create({ nombre: 'productos', seq: 1 });
@@ -24,40 +22,38 @@ router.post('/', async (req, res) => {
     await contador.save();
   }
 
+  idNuevo = contador.seq;
+
   const nuevoProducto = new Producto({
-    id: contador.seq,
+    id: idNuevo,
     nombre: req.body.nombre,
-    imagen: req.body.imagen,  
+    foto: req.body.foto,
     stock: req.body.stock,
-    precio: req.body.precio
+    precio: req.body.precio,
   });
 
   await nuevoProducto.save();
   res.json(nuevoProducto);
 });
 
-// ---------------------------
-// ✅ PUT: actualizar producto por ID incremental
-// ---------------------------
+// PUT: actualizar producto
 router.put('/:id', async (req, res) => {
   const updated = await Producto.findOneAndUpdate(
-    { id: Number(req.params.id) }, 
+    { id: req.params.id },
     {
       nombre: req.body.nombre,
-      imagen: req.body.imagen,  
+      foto: req.body.foto,
       stock: req.body.stock,
-      precio: req.body.precio
+      precio: req.body.precio,
     },
     { new: true }
   );
   res.json(updated);
 });
 
-// ---------------------------
-// ✅ DELETE: eliminar producto por ID incremental
-// ---------------------------
+// DELETE: borrar producto (ID (incremental) reutilizable, no el _id de Mongo)
 router.delete('/:id', async (req, res) => {
-  await Producto.findOneAndDelete({ id: Number(req.params.id) }); 
+  await Producto.findOneAndDelete({ id: req.params.id });
   res.json({ msg: 'Producto eliminado' });
 });
 

@@ -2,6 +2,10 @@ import React from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 
+
+// Componente para el Drawer del carrito
+// Este componente se muestra como un panel lateral que se desliza desde la derecha
+// Contiene la lista de productos en el carrito, total y botones para pagar o vaciar
 const CartDrawer = ({ open, onClose }) => {
   const { carrito, removeFromCart, clearCart } = useCart();
   const total = carrito.reduce((sum, p) => sum + p.precio * p.cantidad, 0);
