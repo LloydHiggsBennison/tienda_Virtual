@@ -8,17 +8,15 @@ import {
   exportarPDF
 } from '../services/api';
 
-
-
-// Componente para el Panel de Administración
-// Este componente permite gestionar productos y ver transacciones
-// Incluye funcionalidades para agregar, editar y eliminar productos
-// También muestra un resumen de las ventas y permite exportar a PDF
-
-
 const Cpannel = () => {
   const [productos, setProductos] = useState([]);
-  const [form, setForm] = useState({ nombre: '', imagen: '', stock: '', precio: '' });
+  const [form, setForm] = useState({
+    nombre: '',
+    imagen: '',
+    descripcion: '',
+    stock: '',
+    precio: ''
+  });
   const [editando, setEditando] = useState(false);
   const [ventas, setVentas] = useState([]);
   const [editId, setEditId] = useState(null);
@@ -50,7 +48,7 @@ const Cpannel = () => {
       precio: Number(form.precio)
     });
     fetchProductos();
-    setForm({ nombre: '', imagen: '', stock: '', precio: '' });
+    setForm({ nombre: '', imagen: '', descripcion: '', stock: '', precio: '' });
   };
 
   const handleEdit = async () => {
@@ -68,7 +66,7 @@ const Cpannel = () => {
     fetchProductos();
     setEditando(false);
     setEditId(null);
-    setForm({ nombre: '', imagen: '', stock: '', precio: '' });
+    setForm({ nombre: '', imagen: '', descripcion: '', stock: '', precio: '' });
   };
 
   const handleDelete = async (id) => {
@@ -85,15 +83,52 @@ const Cpannel = () => {
       <h1 className="text-2xl font-bold mb-4">🛠 Panel de Administración</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input name="nombre" value={form.nombre} onChange={handleChange} placeholder="Nombre" className="border p-2" />
-        <input name="imagen" value={form.imagen} onChange={handleChange} placeholder="URL Imagen" className="border p-2" />
-        <input name="stock" value={form.stock} onChange={handleChange} placeholder="Stock" type="number" className="border p-2" />
-        <input name="precio" value={form.precio} onChange={handleChange} placeholder="Precio" type="number" className="border p-2" />
+        <input
+          name="nombre"
+          value={form.nombre}
+          onChange={handleChange}
+          placeholder="Nombre"
+          className="border p-2"
+        />
+        <input
+          name="imagen"
+          value={form.imagen}
+          onChange={handleChange}
+          placeholder="URL Imagen"
+          className="border p-2"
+        />
+        <input
+          name="descripcion"
+          value={form.descripcion}
+          onChange={handleChange}
+          placeholder="Descripción"
+          className="border p-2 col-span-2"
+        />
+        <input
+          name="stock"
+          value={form.stock}
+          onChange={handleChange}
+          placeholder="Stock"
+          type="number"
+          className="border p-2"
+        />
+        <input
+          name="precio"
+          value={form.precio}
+          onChange={handleChange}
+          placeholder="Precio"
+          type="number"
+          className="border p-2"
+        />
 
         {editando ? (
-          <button onClick={handleEdit} className="bg-yellow-500 text-white p-2 rounded">Actualizar</button>
+          <button onClick={handleEdit} className="bg-yellow-500 text-white p-2 rounded">
+            Actualizar
+          </button>
         ) : (
-          <button onClick={handleAdd} className="bg-green-500 text-white p-2 rounded">Agregar</button>
+          <button onClick={handleAdd} className="bg-green-500 text-white p-2 rounded">
+            Agregar
+          </button>
         )}
       </div>
 
@@ -101,7 +136,13 @@ const Cpannel = () => {
       <table className="w-full mt-2 table-auto border">
         <thead>
           <tr className="bg-gray-200">
-            <th>ID</th><th>Nombre</th><th>Imagen</th><th>Stock</th><th>Precio</th><th>Acciones</th>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Imagen</th>
+            <th>Stock</th>
+            <th>Precio</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -109,13 +150,22 @@ const Cpannel = () => {
             <tr key={p._id} className="text-center border-t">
               <td>{p.id}</td>
               <td>{p.nombre}</td>
-              <td><img src={p.imagen} alt={p.nombre} className="h-10 mx-auto" /></td>
+              <td>{p.descripcion}</td>
+              <td>
+                <img src={p.imagen} alt={p.nombre} className="h-10 mx-auto" />
+              </td>
               <td>{p.stock}</td>
               <td>${p.precio}</td>
               <td>
                 <button
                   onClick={() => {
-                    setForm({ nombre: p.nombre, imagen: p.imagen, stock: p.stock, precio: p.precio });
+                    setForm({
+                      nombre: p.nombre,
+                      imagen: p.imagen,
+                      descripcion: p.descripcion || '',
+                      stock: p.stock,
+                      precio: p.precio
+                    });
                     setEditId(p.id);
                     setEditando(true);
                   }}
@@ -139,7 +189,11 @@ const Cpannel = () => {
       <table className="w-full mt-2 table-auto border">
         <thead>
           <tr className="bg-gray-200">
-            <th>Fecha</th><th>Item</th><th>Cantidad</th><th>Precio Unitario</th><th>Total</th>
+            <th>Fecha</th>
+            <th>Item</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
@@ -151,7 +205,9 @@ const Cpannel = () => {
                   <td>{item.nombre}</td>
                   <td>{item.cantidad}</td>
                   <td>${item.precio}</td>
-                  {idx === 0 ? <td rowSpan={v.items.length}>${v.total}</td> : null}
+                  {idx === 0 ? (
+                    <td rowSpan={v.items.length}>${v.total}</td>
+                  ) : null}
                 </tr>
               ))}
             </React.Fragment>
@@ -159,7 +215,10 @@ const Cpannel = () => {
         </tbody>
       </table>
 
-      <button onClick={handleExportPDF} className="mt-4 bg-blue-500 text-white p-2 rounded">
+      <button
+        onClick={handleExportPDF}
+        className="mt-4 bg-blue-500 text-white p-2 rounded"
+      >
         Exportar a PDF
       </button>
     </div>

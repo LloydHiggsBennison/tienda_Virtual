@@ -27,7 +27,8 @@ router.post('/', async (req, res) => {
   const nuevoProducto = new Producto({
     id: contador.seq,
     nombre: req.body.nombre,
-    imagen: req.body.imagen,  
+    descripcion: req.body.descripcion, // ✅ descripción agregada
+    imagen: req.body.imagen,
     stock: req.body.stock,
     precio: req.body.precio
   });
@@ -41,10 +42,11 @@ router.post('/', async (req, res) => {
 // ---------------------------
 router.put('/:id', async (req, res) => {
   const updated = await Producto.findOneAndUpdate(
-    { id: Number(req.params.id) }, 
+    { id: Number(req.params.id) },
     {
       nombre: req.body.nombre,
-      imagen: req.body.imagen,  
+      descripcion: req.body.descripcion, // ✅ descripción actualizada
+      imagen: req.body.imagen,
       stock: req.body.stock,
       precio: req.body.precio
     },
@@ -57,7 +59,7 @@ router.put('/:id', async (req, res) => {
 // ✅ DELETE: eliminar producto por ID incremental
 // ---------------------------
 router.delete('/:id', async (req, res) => {
-  await Producto.findOneAndDelete({ id: Number(req.params.id) }); 
+  await Producto.findOneAndDelete({ id: Number(req.params.id) });
   res.json({ msg: 'Producto eliminado' });
 });
 

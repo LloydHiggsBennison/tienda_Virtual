@@ -16,6 +16,7 @@ export const getProductos = async () => {
 export const addProducto = async (data) => {
   return await axios.post(API_PRODUCTOS, {
     nombre: data.nombre,
+    descripcion: data.descripcion,
     imagen: data.imagen, 
     stock: Number(data.stock),
     precio: Number(data.precio)
@@ -25,6 +26,7 @@ export const addProducto = async (data) => {
 export const updateProducto = async (id, data) => {
   return await axios.put(`${API_PRODUCTOS}/${id}`, {
     nombre: data.nombre,
+    descripcion: data.descripcion,
     imagen: data.imagen, 
     stock: Number(data.stock),
     precio: Number(data.precio)
